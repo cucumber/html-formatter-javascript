@@ -15,3 +15,5 @@ storybook-static
 *-go
 *.iml
 .vscode-test
+test/examples/**/*.actual.png
+test/examples/**/*.diff.png
