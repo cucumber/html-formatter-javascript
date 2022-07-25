@@ -1,6 +1,7 @@
 import { NdjsonToMessageStream } from '@cucumber/message-streams'
 import assert from 'assert'
 import fs from 'fs'
+import { writeFile } from 'fs/promises'
 import glob from 'glob'
 import path from 'path'
 import puppeteer from 'puppeteer'
@@ -33,10 +34,11 @@ describe('html-formatter', () => {
     `./node_modules/@cucumber/compatibility-kit/features/**/*.ndjson`
   )
   for (const ndjson of files) {
-    it(`can render ${path.basename(ndjson, '.ndjson')}`, async () => {
+    const basename = path.basename(ndjson, '.ndjson')
+    it(`can render ${basename}`, async () => {
       const ndjsonData = fs.createReadStream(ndjson, { encoding: 'utf-8' })
       const toMessageStream = new NdjsonToMessageStream()
-      const htmlData = await new Promise<string>((resolve, reject) => {
+      const html = await new Promise<string>((resolve, reject) => {
         const chunks: Buffer[] = []
         const out = new PassThrough()
           .on('data', (chunk) => chunks.push(Buffer.from(chunk)))
@@ -56,7 +58,8 @@ describe('html-formatter', () => {
           }
         )
       })
-      assert.ok(await canRenderHtml(htmlData.toString()))
+      await writeFile(`html/${basename}.html`, html, 'utf-8')
+      assert.ok(await canRenderHtml(html))
     })
   }
 })

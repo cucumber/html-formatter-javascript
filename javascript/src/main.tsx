@@ -1,8 +1,8 @@
 import './styles.scss'
 
-import * as messages from '@cucumber/messages'
+import { Envelope } from '@cucumber/messages'
 import { components, searchFromURLParams } from '@cucumber/react-components'
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const { CucumberReact } = components
@@ -10,18 +10,23 @@ const { FilteredResults, EnvelopesWrapper, SearchWrapper } = components.app
 
 declare global {
   interface Window {
-    CUCUMBER_MESSAGES: messages.Envelope[]
+    p(envelope: Envelope): void
   }
 }
 
-const app = (
-  <CucumberReact theme="auto">
-    <EnvelopesWrapper envelopes={window.CUCUMBER_MESSAGES}>
-      <SearchWrapper {...searchFromURLParams()}>
-        <FilteredResults className="html-formatter" />
-      </SearchWrapper>
-    </EnvelopesWrapper>
-  </CucumberReact>
-)
+const App: React.FunctionComponent = () => {
+  const [envelopes, setEnvelopes] = useState<readonly Envelope[]>([])
+  window.p = (envelope) => setEnvelopes(envelopes.concat(envelope))
 
-ReactDOM.render(app, document.getElementById('content'))
+  return (
+    <CucumberReact theme="auto">
+      <EnvelopesWrapper envelopes={envelopes}>
+        <SearchWrapper {...searchFromURLParams()}>
+          <FilteredResults className="html-formatter" />
+        </SearchWrapper>
+      </EnvelopesWrapper>
+    </CucumberReact>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('content'))

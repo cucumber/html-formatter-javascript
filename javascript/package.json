@@ -6,7 +6,7 @@
   "types": "dist/src/CucumberHtmlStream.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cucumber/cucumber.git"
+    "url": "git+https://github.com/cucumber/cucumber-html.git"
   },
   "author": "Aslak Hellesøy",
   "license": "MIT",

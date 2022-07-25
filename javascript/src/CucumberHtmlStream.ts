@@ -47,9 +47,12 @@ export default class CucumberHtmlStream extends Transform {
       if (err) return callback(err)
       this.writeFile(this.cssPath, (err) => {
         if (err) return callback(err)
-        this.writeTemplateBetween('{{css}}', '{{messages}}', (err) => {
+        this.writeTemplateBetween('{{css}}', '{{script}}', (err) => {
           if (err) return callback(err)
-          callback()
+          this.writeFile(this.jsPath, (err) => {
+            if (err) return callback(err)
+            this.writeTemplateBetween('{{script}}', '{{messages}}', callback)
+          })
         })
       })
     })
@@ -58,13 +61,7 @@ export default class CucumberHtmlStream extends Transform {
   private writePostMessage(callback: TransformCallback) {
     this.writePreMessageUnlessAlreadyWritten((err) => {
       if (err) return callback(err)
-      this.writeTemplateBetween('{{messages}}', '{{script}}', (err) => {
-        if (err) return callback(err)
-        this.writeFile(this.jsPath, (err) => {
-          if (err) return callback(err)
-          this.writeTemplateBetween('{{script}}', null, callback)
-        })
-      })
+      this.writeTemplateBetween('{{messages}}', null, callback)
     })
   }
 
@@ -110,11 +107,6 @@ export default class CucumberHtmlStream extends Transform {
   }
 
   private writeMessage(envelope: messages.Envelope) {
-    if (!this.firstMessageWritten) {
-      this.firstMessageWritten = true
-    } else {
-      this.push(',')
-    }
-    this.push(JSON.stringify(envelope))
+    this.push(`<script>p(${JSON.stringify(envelope)});</script>\n`)
   }
 }

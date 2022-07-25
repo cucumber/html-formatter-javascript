@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# Works like cat, but slows down printing after seeing the first </script> tag.
+# By default, the delay in slow mode is 1 second. This can be overridden by passing an argument
+#
+
+pause=${1:-1}
+slow=false
+while IFS='$\n' read -r line; do
+  if [[ "$slow" = true ]]; then sleep $pause; fi
+  echo "$line"
+  if [[ "$line" = "</script>" ]] && [[ "$slow" = false ]]; then
+    slow=true;
+  fi
+done

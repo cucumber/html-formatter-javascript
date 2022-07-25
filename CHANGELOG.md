@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+- Incrementally render the HTML report. ([#120](https://github.com/cucumber/html-formatter/issues/120), [#121](https://github.com/cucumber/html-formatter/pull/121))
+
 ## [19.2.0] - 2022-05-27
 ### Changed
 - Upgrade to `@cucumber/react-components` `^20.1.0`
