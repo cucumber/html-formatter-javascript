@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
     'source_code_uri' => 'https://github.com/cucumber/html-formatter'
   }
 
-  s.add_runtime_dependency 'cucumber-messages', '> 19', '< 27'
+  s.add_runtime_dependency 'cucumber-messages', '> 19', '< 28'
 
   s.add_development_dependency 'cucumber-compatibility-kit', '~> 15.2'
   s.add_development_dependency 'rake', '~> 13.2'
